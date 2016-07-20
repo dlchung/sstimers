@@ -15,13 +15,36 @@ var markerArray = new Array();
 
 map.fitBounds(bounds);
 map.setMaxBounds(bounds);
+$('.leaflet-container').css('cursor','crosshair');
 
-map.on('click', function(e) {
-	function addMarker(e) {
-		var newMarker = new L.marker(e.latlng).addTo(map);
-		markerArray.push(newMarker);
-		newMarker.bindPopup('test').openPopup();
-	}
+map.on('click', onMapClick);
 
-	addMarker(e);
-});
+function onMapClick(e) {
+	var newMarker = new L.marker(e.latlng).addTo(map);
+	markerArray.push(newMarker);
+
+	// marker popup content
+	var popupContent = "<div class='marker-box'>" +
+	"<h4>Title</h4>" +
+	"<p>Description</p>" +
+	"<p>Time</p>" +
+	"<a href='#' class='deleteMarkerButton'>Delete Marker</a>" +
+	"</div>";
+
+	var popupOptions = {
+		'minWidth': '100',
+	};
+	
+	newMarker.on('popupopen', onPopupOpen);
+
+	newMarker.bindPopup(popupContent, popupOptions).openPopup();	
+}
+
+// handle events when popup is opened
+function onPopupOpen() {
+	var tempMarker = this;
+
+	$('.deleteMarkerButton:visible').click(function() {
+		map.removeLayer(tempMarker);
+	});
+}
