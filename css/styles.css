@@ -6,3 +6,9 @@ html, body {
 
 .marker-box {
 }
+
+	.marker-box #markerHours,
+	.marker-box #markerMins {
+		width: 20px;
+		text-align: center;
+	}

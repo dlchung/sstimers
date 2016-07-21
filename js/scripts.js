@@ -12,6 +12,7 @@ var bounds = [[0,0], [1938,1762]];
 var image = L.imageOverlay('images/map_v1.jpg', bounds).addTo(map);
 
 var markerArray = new Array();
+var markerData = new Object();
 
 map.fitBounds(bounds);
 map.setMaxBounds(bounds);
@@ -25,10 +26,9 @@ function onMapClick(e) {
 
 	// marker popup content
 	var popupContent = "<div class='marker-box'>" +
-	"<h4>Title</h4>" +
-	"<p>Description</p>" +
-	"<p>Time</p>" +
-	"<a href='#' class='deleteMarkerButton'>Delete Marker</a>" +
+	"<h4><input type='text' name='markerTitle" + newMarker._leaflet_id + "' class='markerTextBox' id='markerTitle' /></h4>" +
+	"<p>Time <input type='text' name='markerHours" + newMarker._leaflet_id + "' class='markerTextBox' id='markerHours' />:<input type='text' name='markerMins" + newMarker._leaflet_id + "' class='markerTextBox' id='markerMins' /></p>" +
+	"<a href='#' class='saveMarkerButton'>Save</a> <a href='#' class='deleteMarkerButton'>Delete Marker</a>" +
 	"</div>";
 
 	var popupOptions = {
@@ -38,13 +38,43 @@ function onMapClick(e) {
 	newMarker.on('popupopen', onPopupOpen);
 
 	newMarker.bindPopup(popupContent, popupOptions).openPopup();	
+
+	//console.log(newMarker);
+	//alert(newMarker._leaflet_id);
 }
 
 // handle events when popup is opened
 function onPopupOpen() {
-	var tempMarker = this;
+	var e = this;
 
 	$('.deleteMarkerButton:visible').click(function() {
-		map.removeLayer(tempMarker);
+		map.removeLayer(e);
+	});
+
+	$('.saveMarkerButton:visible').click(function() {
+		onSave(e);
 	});
 }
+
+function onSave(e) {
+	var markerTitleId = $('#markerTitle').attr('name');
+	var markerHoursId = $('#markerHours').attr('name');
+	var markerMinsId = $('#markerMins').attr('name');
+
+	var markerTitle = $('input[name="markerTitle' + e._leaflet_id + '"]').val();
+	var markerHours = $('input[name="markerHours' + e._leaflet_id + '"]').val();
+	var markerMins = $('input[name="markerMins' + e._leaflet_id + '"]').val();
+
+	var newData = [e._leaflet_id, markerTitle, markerHours, markerMins];
+
+	// console.log(markerTitleId + " " + markerHoursId + " " + markerMinsId);
+	// console.log(markerTitle + " " + markerHours + " " + markerMins);
+	console.log(newData);
+
+	markerData.push(newData);
+	console.log(markerData);
+
+	e.closePopup();
+}
+
+function onEdit() {}
