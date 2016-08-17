@@ -10,6 +10,11 @@ var map = L.map('mapid', {
 
 var bounds = [[0,0], [1938,1762]];
 var image = L.imageOverlay('images/map_v1.jpg', bounds).addTo(map);
+var markerData;
+var popupContent;
+var popupOptions;
+var toolTipSettings = {permanent: true, direction: 'top', opacity: '0.8'};
+var currentMarker;
 
 //var markerArray = new Array();
 var markerData = new Object();
@@ -19,12 +24,11 @@ map.setMaxBounds(bounds);
 $('.leaflet-container').css('cursor','crosshair');
 
 window.onload = function() {
-	if(localStorage.getItem('markers')) {
-		markerData = JSON.parse(localStorage.getItem('markers'))
+	//localStorage.setItem('markerData', "");
+	if(localStorage.getItem('markerData')) {
+		markerData = JSON.parse(localStorage.getItem('markerData'));
 	}
 	loadMarkers(markerData);
-	//console.log(markerData);
-	//localStorage.setItem('markers', "");
 };
 
 // handle map clicking
@@ -32,16 +36,15 @@ map.on('click', onMapClick);
 
 function onMapClick(e) {
 	var newMarker = new L.marker(e.latlng).addTo(map);
-	newMarker.bindTooltip('00:00', {permanent: true, direction: 'top', opacity: '0'});
 	//markerArray.push(newMarker);
-	markerData[newMarker._leaflet_id] = newMarker;
+	//markerData[newMarker._leaflet_id] = newMarker;
+	var markerId = newMarker._leaflet_id;
 
 	// marker popup content
-	var popupContent = "" +
+	popupContent = "" +
 	"<div class='marker-box'>" +
-		"<div class='marker-edit " + newMarker._leaflet_id + "'>" +
-			//"<h4><input type='text' name='markerTitle" + newMarker._leaflet_id + "' class='markerTextBox' id='markerTitle' /></h4>" +
-			"<p>Time <input type='text' name='markerHours" + newMarker._leaflet_id + "' class='markerTextBox' id='markerHours' maxlength='2' />:<input type='text' name='markerMins" + newMarker._leaflet_id + "' class='markerTextBox' id='markerMins' maxlength='2' /></p>" +
+		"<div class='marker-edit " + markerId + "'>" +
+			"<p>Time <input type='text' name='markerHours" + markerId + "' class='markerTextBox' id='markerHours' maxlength='2' />:<input type='text' name='markerMins" + markerId + "' class='markerTextBox' id='markerMins' maxlength='2' /></p>" +
 			"<a href='#' class='saveMarkerButton'>Save</a><br /><a href='#' class='deleteMarkerButton'>Delete Marker</a>" +
 	"</div>";
 
@@ -53,7 +56,11 @@ function onMapClick(e) {
 
 	newMarker.bindPopup(popupContent, popupOptions).openPopup();
 
-	console.log(newMarker);
+	newMarker.bindTooltip('00:00', toolTipSettings);
+
+
+
+	//console.log(e);
 }
 
 // handle events when popup is opened
@@ -61,7 +68,7 @@ function onPopupOpen() {
 	var e = this;
 
 	$('.deleteMarkerButton:visible').click(function() {
-		map.removeLayer(e);
+		map.removeLayer(this);
 	});
 
 	$('.saveMarkerButton:visible').click(function() {
@@ -78,24 +85,28 @@ function onSave(e) {
 	var startDate = Date.now();
 
 	var newData = [e._leaflet_id, e._latlng, markerHours, markerMins, startDate];
-
-	// console.log(markerTitleId + " " + markerHoursId + " " + markerMinsId);
-	// console.log(markerTitle + " " + markerHours + " " + markerMins);
-	console.log(newData);
 	
 	markerData[e._leaflet_id] = newData;
-	localStorage.setItem('markers', JSON.stringify(markerData));
-	//console.log(markerData);
-	console.log(JSON.parse(localStorage.getItem('markers')));
+	localStorage.setItem('markerData', JSON.stringify(markerData));
 
 	e.setTooltipContent(markerHours + ':' + markerMins);
 	e.closePopup();
 }
 
+function onCreate(e) {
+	var markerLoc = [e._leaflet_id, e._latlng]
+	localStorage.setItem('markerLoc', JSON.stringify(markerLoc));
+}
+
 function loadMarkers(markerObject) {
 	for(var key in markerObject) {
 		var markerArray = markerObject[key];
-		L.marker(markerArray[1]).addTo(map);
+		var markerId = markerArray[0];
+		var latlng = new Object();
+		latlng = markerArray[1];
+		loadedMarker = new L.marker(latlng).addTo(map);
+		loadedMarker.bindTooltip('00:00', toolTipSettings);
+		loadedMarker.bindPopup(popupContent, popupOptions);
 		console.log(markerArray);
 	}
 }
