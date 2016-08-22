@@ -83,8 +83,7 @@ function onDelete(e) {
 	// var markerId = $('.marker-edit.' + this._leaflet_id);
 	// console.log(markerId);
 	delete markerData[e._leaflet_id];
-	console.log(e);
-	console.log(e._leaflet_id);
+	storeMarkers(markerData);
 }
 
 function loadMarkers(markerObject) {
