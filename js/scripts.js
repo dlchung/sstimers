@@ -44,7 +44,8 @@ function onMapClick(e) {
 
 	newMarker.on('popupopen', onPopupOpen);
 	newMarker.bindPopup(popupContent, popupOptions).openPopup();
-	newMarker.bindTooltip('00:00', toolTipSettings);
+	toolTipSettings.className = markerId;
+	newMarker.bindTooltip('0:00:00', toolTipSettings);
 }
 
 // handle events when popup is opened
@@ -75,7 +76,8 @@ function onSave(e) {
 
 	storeMarkers(markerData);
 
-	e.setTooltipContent(markerHours + ':' + markerMins);
+	e.setTooltipContent('00:00:00');
+	updateTime(e._leaflet_id, markerHours, markerMins, startDate);
 	e.closePopup();
 }
 
@@ -100,11 +102,14 @@ function loadMarkers(markerObject) {
 
 		latlng = markerArray[1];
 		loadedMarker = new L.marker(latlng).addTo(map);
-		loadedMarker.bindTooltip('00:00', toolTipSettings);
+		toolTipSettings.className = loadedMarker._leaflet_id;
+		loadedMarker.bindTooltip('00:00:00', toolTipSettings);
 		loadedMarker.on('popupopen', onPopupOpen);
 		loadedMarker.bindPopup(popupContent, popupOptions);
 
-		// we have to save new ids since we cant keep the old ids after loading the saved markers
+		updateTime(loadedMarker._leaflet_id, markerHours, markerMins, startDate);
+
+		// we have to save newly generated ids since we cant retain the old ids after loading the markers
 		newMarkerObject[loadedMarker._leaflet_id] = [loadedMarker._leaflet_id, loadedMarker._latlng, markerHours, markerMins, startDate];
 	}
 
@@ -123,14 +128,21 @@ function getMarkers() {
 	return a;
 }
 
-function updateTime() {}
+function updateTime(markerId, markerHours, markerMins, startDate) {
+	addToDate = ((markerHours * 60 * 60) + (markerMins * 60)) * 1000;
+
+	$('.leaflet-tooltip.' + markerId).countdown(startDate + addToDate, function(event) {
+		$(this).html(event.strftime('%H:%M:%S'));
+	});
+}
 
 function getPopupContent(markerId) {
 	popupContent = "" +
 	"<div class='marker-box'>" +
 		"<div class='marker-edit " + markerId + "'>" +
 			"<p>Time <input type='text' name='markerHours" + markerId + "' class='markerTextBox' id='markerHours' maxlength='2' />:<input type='text' name='markerMins" + markerId + "' class='markerTextBox' id='markerMins' maxlength='2' /></p>" +
-			"<a href='#' class='saveMarkerButton'>Save</a><br /><a href='#' class='deleteMarkerButton'>Delete Marker</a>" +
+			"<p><input type='radio' />Loot Crate<br /><input type='radio' />Uplink/Blockade</p>" +
+			"<a href='#' class='saveMarkerButton'>Save</a> | <a href='#' class='deleteMarkerButton'>Delete</a> | <a href='#' class='resetMarkerButton'>Reset</a>" +
 	"</div>";
 
 	return popupContent;
