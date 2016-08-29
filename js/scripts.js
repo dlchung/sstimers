@@ -177,8 +177,33 @@ function getMarkers() {
 function updateTime(markerId, markerHours, markerMins, startDate) {
 	addToDate = ((markerHours * 60 * 60) + (markerMins * 60)) * 1000;
 
+	// $('.leaflet-tooltip.' + markerId).countdown(startDate + addToDate, function(event) {
+	// 	$(this).html(event.strftime('%-H:%M:%S'));
+	// }).on('update.countdown', function(event) {
+	// 	if(event.offset.totalMinutes < 5) {
+	// 		$(this).parent().addClass('endingTimer');
+	// 		console.log('test');
+	// 	}
+	// });
+
 	$('.leaflet-tooltip.' + markerId).countdown(startDate + addToDate, function(event) {
 		$(this).html(event.strftime('%-H:%M:%S'));
+	})
+	.on('update.countdown', function(event) {
+		if(event.offset.hours < 1) {
+			if(event.offset.minutes < 10 && event.offset.minutes >= 3) {
+				$(this).addClass('stage-two-timer');
+				$(this).removeClass('stage-three-timer');
+			}
+			if(event.offset.minutes < 3) {
+				$(this).addClass('stage-three-timer');
+				$(this).removeClass('stage-two-timer');
+			}
+		}
+		else {
+			$(this).removeClass('stage-two-timer');
+			$(this).removeClass('stage-three-timer');
+		}
 	});
 }
 
@@ -187,7 +212,7 @@ function getPopupContent(markerId) {
 	"<div class='marker-box'>" +
 		"<div class='marker-edit " + markerId + "'>" +
 			"<p>Time <input type='text' name='markerHours" + markerId + "' class='markerTextBox' id='markerHours' maxlength='1' /> : <input type='text' name='markerMins" + markerId + "' class='markerTextBox' id='markerMins' maxlength='2' /></p>" +
-			"<p><input type='radio' name='markerType" + markerId + "' value='lootCrate' />Loot Crate<br /><input type='radio' name='markerType" + markerId + "' value='uplinkBlockade' />Uplink/Blockade<br /><input type='radio' name='markerType" + markerId + "' value='custom' />Custom</p>" +
+			"<p><input type='radio' name='markerType" + markerId + "' value='lootCrate' />Loot Crate<br /><input type='radio' name='markerType" + markerId + "' value='uplinkBlockade' />Uplink/Blockade<br /><input type='radio' name='markerType" + markerId + "' value='custom' checked='checked' />Custom</p>" +
 			"<a href='#' class='saveMarkerButton'>Save</a> | <a href='#' class='deleteMarkerButton'>Delete</a> | <a href='#' class='resetMarkerButton'>Reset</a>" +
 	"</div>";
 

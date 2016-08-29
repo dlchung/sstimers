@@ -12,3 +12,17 @@ html, body {
 		width: 20px;
 		text-align: center;
 	}
+
+#mapid > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-tooltip-pane > div.leaflet-tooltip {
+	font-size: 1.1em;
+}
+
+.stage-two-timer {
+	color: green !important;
+	font-weight: bold;
+}
+
+.stage-three-timer {
+	color: red !important;
+	font-weight: bold;
+}
