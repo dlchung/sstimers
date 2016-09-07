@@ -1,8 +1,64 @@
-html, body {
-	background: #222222;
+* {
+	margin: 0;
 }
 
-#mapid { height: 700px; }
+html, body {
+	background: #222222;
+	font-family: Helvetica, Arial, sans-serif;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+}
+
+#wrapper {
+	height: 90%;
+	min-height: 90%;
+	margin: 0 auto -40px;
+}
+
+#header {
+	height: 40px;
+	margin: 0;
+	padding: 10px;
+}
+
+	#header #logo {
+		display: block;
+		float: left;
+	}
+
+		#header #logo h1 a {
+			color: #fff;
+			margin: 0;
+			padding: 0;
+			text-decoration: none;
+		}
+
+	#header #nav {
+		display: block;
+		float: right;
+	}
+
+		#header #nav a {
+			color: orange;
+			text-decoration: none;
+			padding: 0 5px;
+			line-height: 40px;
+		}
+
+#map-wrapper {
+	clear: both;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+}
+
+#mapid {
+	background: #333;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+}
 
 .marker-box {
 }
