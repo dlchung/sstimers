@@ -33,6 +33,11 @@ window.onload = function() {
 	storeMarkers(markerData);
 };
 
+// handle menu clicking
+$('.deleteAllMarkers:visible').click(function() {
+	deleteAllMarkers();
+});
+
 // handle map clicking
 map.on('click', onMapClick);
 
@@ -210,4 +215,15 @@ function getPopupContent(markerId) {
 	"</div>";
 
 	return popupContent;
+}
+
+function deleteAllMarkers() {
+	if(confirm('Are you sure you want to delete all markers?')) {
+		localStorage.setItem('markerData', '');
+		location.reload();
+	}
+}
+
+function addLootCrates() {
+	
 }

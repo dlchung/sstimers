@@ -58,13 +58,23 @@ html, body {
 	height: 100vh;
 	margin: 0;
 	padding: 0;
+	z-index: 0;
 }
 
 #map-nav {
-	background: green;
+	background: #333;
+	color: #fff;
 	position: absolute;
+	margin: 10px 10px 0 0;
+	padding: 5px;
 	right: 0;
+	z-index: 1;
 }
+
+	#map-nav a {
+		color: orange;
+		text-decoration: none;
+	}
 
 .marker-box {
 }
