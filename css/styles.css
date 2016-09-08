@@ -60,6 +60,12 @@ html, body {
 	padding: 0;
 }
 
+#map-nav {
+	background: green;
+	position: absolute;
+	right: 0;
+}
+
 .marker-box {
 }
 

@@ -6,13 +6,16 @@ var map = L.map('mapid', {
 	crs: L.CRS.Simple,
 	minZoom: 0,
 	maxZoom: 1,
+	zoomSnap: 0.5,
+	zoomDelta: 0.5,
+	maxBoundsViscosity: 0.8,
 });
 
-var bounds = [[0,0], [1938,1762]];
-var image = L.imageOverlay('images/map_v1.jpg', bounds).addTo(map);
+var bounds = [[-200,-200], [1744,1738]];
+var image = L.imageOverlay('images/map.jpg', bounds).addTo(map);
 var markerData;
 var popupOptions;
-var toolTipSettings = {permanent: true, direction: 'top', opacity: '0.8'};
+var toolTipSettings = {permanent: true, direction: 'top', opacity: '0.9'};
 
 var markerData = new Object();
 
