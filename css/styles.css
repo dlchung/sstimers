@@ -29,6 +29,7 @@ html, body {
 
 		#header #logo h1 a {
 			color: #fff;
+			font-weight: normal;
 			margin: 0;
 			padding: 0;
 			text-decoration: none;
@@ -40,11 +41,16 @@ html, body {
 	}
 
 		#header #nav a {
-			color: orange;
+			color: #FF5D0D;
 			text-decoration: none;
 			padding: 0 5px;
 			line-height: 40px;
 		}
+
+			#header #nav a:hover {
+				color: #fff;
+				text-decoration: underline;
+			}
 
 #map-wrapper {
 	clear: both;
@@ -66,15 +72,23 @@ html, body {
 	color: #fff;
 	position: absolute;
 	margin: 10px 10px 0 0;
-	padding: 5px;
+	padding: 5px 8px;
 	right: 0;
 	z-index: 1;
 }
 
 	#map-nav a {
-		color: orange;
+		color: #FF5D0D;
+		font-size: 0.8em;
+		margin: 0;
+		padding: 0;
 		text-decoration: none;
 	}
+
+		#map-nav a:hover {
+			color: #fff;
+			text-decoration: underline;
+		}
 
 .marker-box {
 }
