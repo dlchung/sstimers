@@ -41,7 +41,7 @@ $('.deleteAllMarkers:visible').click(function() {
 	}
 });
 $('.resetMarkers:visible').click(function() {
-	if(confirm('Are you sure you want to RESET markers?')) {
+	if(confirm('Are you sure you want add markers for loot crates, blockades, and uplinks?')) {
 		addPresetMarkers();
 		location.reload();
 	}
@@ -64,7 +64,6 @@ function onMapClick(e) {
 	toolTipSettings.className = markerId;
 	newMarker.bindTooltip('0:00:00', toolTipSettings);
 
-	console.log(newMarker._latlng);
 }
 
 // handle events when popup is opened
@@ -73,7 +72,10 @@ function onPopupOpen() {
 
 	// autofill saved data
 	if(markerData[e._leaflet_id]) {
-		$('input[name="markerHours' + e._leaflet_id + '"]').val(markerData[e._leaflet_id][2]);
+		if(markerData[e._leaflet_id][2] !== "") {
+			$('input[name="markerHours' + e._leaflet_id + '"]').val(markerData[e._leaflet_id][2]);
+		}
+		
 		$('input[name="markerMins' + e._leaflet_id + '"]').val(markerData[e._leaflet_id][3]);
 		$('input[name="markerType' + e._leaflet_id + '"][value="' + markerData[e._leaflet_id][5] + '"').prop('checked', true);
 	}
@@ -84,12 +86,15 @@ function onPopupOpen() {
 	});
 
 	$('.saveMarkerButton:visible').click(function() {
+		$('.watermark').watermark('clearWatermarks');
 		onSave(e);
 	});
 
 	$('.resetMarkerButton:visible').click(function() {
 		onReset(e);
 	})
+
+	$('.watermark').watermark(); // add text watermarks
 }
 
 function onSave(e) {
@@ -219,9 +224,9 @@ function getPopupContent(markerId) {
 	popupContent = "" +
 	"<div class='marker-box'>" +
 		"<div class='marker-edit " + markerId + "'>" +
-			"<p>Time <input type='text' name='markerHours" + markerId + "' class='markerTextBox' id='markerHours' maxlength='1' /> : <input type='text' name='markerMins" + markerId + "' class='markerTextBox' id='markerMins' maxlength='2' /></p>" +
+			"<p>Time <input type='text' name='markerHours" + markerId + "' class='markerTextBox watermark' id='markerHours' maxlength='1' title='h' /> : <input type='text' name='markerMins" + markerId + "' class='markerTextBox watermark' id='markerMins' maxlength='2' title='mm' /></p>" +
 			"<p><label for='lootCrate'><input type='radio' name='markerType" + markerId + "' id='lootCrate' value='lootCrate' /> Loot Crate</label><br /><label for='uplinkBlockade'><input type='radio' name='markerType" + markerId + "' id='uplinkBlockade' value='uplinkBlockade' /> Uplink/Blockade<br /><label for='custom'><input type='radio' name='markerType" + markerId + "' id='custom' value='custom' checked='checked' /> Custom</label></p>" +
-			"<a href='#' class='saveMarkerButton'>Save</a> | <a href='#' class='deleteMarkerButton'>Delete</a> | <a href='#' class='resetMarkerButton'>Reset</a>" +
+			"<a href='#' class='saveMarkerButton'>Save</a> | <a href='#' class='deleteMarkerButton'>Delete</a> | <a href='#' class='resetMarkerButton'>Restart</a>" +
 	"</div>";
 
 	return popupContent;
@@ -291,7 +296,7 @@ function addPresetMarkers() {
 	var genId = 0;
 	for(var key in lootCratesObject) {
 		var newLatLng = lootCratesObject[key];
-		var newData = ['lootCrate' + genId, newLatLng, 0, 0, startDate, 'lootCrate'];
+		var newData = ['lootCrate' + genId, newLatLng, 2, '00', 0, 'lootCrate'];
 		markerData['lootCrate' + genId] = newData;
 		genId += 1;
 	}
@@ -299,7 +304,7 @@ function addPresetMarkers() {
 	var genId = 0;
 	for(var key in blockadesObject) {
 		var newLatLng = blockadesObject[key];
-		var newData = ['blockade' + genId, newLatLng, 0, 0, startDate, 'uplinkBlockade'];
+		var newData = ['blockade' + genId, newLatLng, 0, 45, 0, 'uplinkBlockade'];
 		markerData['blockade' + genId] = newData;
 		genId += 1;
 	}
@@ -307,7 +312,7 @@ function addPresetMarkers() {
 	var genId = 0;
 	for(var key in uplinksObject) {
 		var newLatLng = uplinksObject[key];
-		var newData = ['uplink' + genId, newLatLng, 0, 0, startDate, 'uplinkBlockade'];
+		var newData = ['uplink' + genId, newLatLng, 0, 45, 0, 'uplinkBlockade'];
 		markerData['uplink' + genId] = newData;
 		genId += 1;
 	}

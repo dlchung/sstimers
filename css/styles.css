@@ -10,6 +10,8 @@ html, body {
 	padding: 0;
 }
 
+input.marked, textarea.marked { color: #aaa; }
+
 #wrapper {
 	height: 90%;
 	min-height: 90%;
@@ -95,8 +97,13 @@ html, body {
 
 	.marker-box #markerHours,
 	.marker-box #markerMins {
-		width: 20px;
+		font-size: 1.1em;
 		text-align: center;
+		width: 25px;
+	}
+
+	.marker-box .marker-edit label {
+		vertical-align: middle;
 	}
 
 #mapid > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-tooltip-pane > div.leaflet-tooltip {
